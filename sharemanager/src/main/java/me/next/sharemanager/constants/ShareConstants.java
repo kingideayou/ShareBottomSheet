@@ -24,9 +24,22 @@ public class ShareConstants {
     public static final int PLATFORM_WEIBO_TIMELINE = 4;
 
     /**
+     * QQ 好友
+     */
+    public static final int PLATFORM_QQ_FRIEND = 5;
+    /**
+     * QQ 收藏
+     */
+    public static final int PLATFORM_QQ_FAVOITE = 6;
+    /**
+     * QQ 文件
+     */
+    public static final int PLATFORM_QQ_FILE = 7;
+
+    /**
      * 不需要特殊处理的应用
      */
-    public static final int PLATFROM_NORMAL = 0;
+    public static final int PLATFORM_NORMAL = 0;
 
 
     /**
@@ -68,6 +81,14 @@ public class ShareConstants {
     public static final class WeiBo {
         public static final String WEIBO_PACKAGE = "com.sina.weibo";
         public static final String WEIBO_TIMELINE = "com.sina.weibo.composerinde.ComposerDispatchActivity";
+    }
+
+    public static final class QQ {
+        public static final String QQ_PACKAGE = "com.tencent.mobileqq";
+        public static final String QQ_FAVIOTE_PACKAGE = "cooperation.qqfav";
+        public static final String QQ_FRIEND = "com.tencent.mobileqq.activity.JumpActivity";
+        public static final String QQ_FAVOITE = "cooperation.qqfav.widget.QfavJumpActivity";
+        public static final String QQ_FILE = "com.tencent.mobileqq.activity.qfileJumpActivity";
     }
 
 }

@@ -23,28 +23,39 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 new ShareDialogManager.Builder()
                         .enableWeChat(true)
-                        .build().showShareTextDialog(MainActivity.this, new OnShareClick() {
-                    @Override
-                    public void onPlatformClick(int platform, ShareActivityInfo shareActivityInfo) {
-                        switch (platform) {
-                            case ShareConstants.PLATFORM_WECHAT_FAVORITE:
-                                showToast("微信收藏");
-                                break;
-                            case ShareConstants.PLATFORM_WECHAT_FRIEND:
-                                showToast("微信好友");
-                                break;
-                            case ShareConstants.PLATFORM_WECHAT_TIMELINE:
-                                showToast("微信朋友圈");
-                                break;
-                            case ShareConstants.PLATFORM_WEIBO_TIMELINE:
-                                showToast("微博");
-                                break;
-                            case ShareConstants.PLATFROM_NORMAL:
-                                ShareUtils.startDefaultShareTextIntent(MainActivity.this, shareActivityInfo, "要分享的文字");
-                                break;
-                        }
+                        .enableQQ(true)
+                        .build().showShareTextDialog(MainActivity.this,
+                        new OnShareClick() {
+                            @Override
+                            public void onPlatformClick(int platform, ShareActivityInfo shareActivityInfo) {
+                                switch (platform) {
+                                    case ShareConstants.PLATFORM_WECHAT_FAVORITE:
+                                        showToast("微信收藏");
+                                        break;
+                                    case ShareConstants.PLATFORM_WECHAT_FRIEND:
+                                        showToast("微信好友");
+                                        break;
+                                    case ShareConstants.PLATFORM_WECHAT_TIMELINE:
+                                        showToast("微信朋友圈");
+                                        break;
+                                    case ShareConstants.PLATFORM_WEIBO_TIMELINE:
+                                        showToast("微博");
+                                        break;
+                                    case ShareConstants.PLATFORM_QQ_FRIEND:
+                                        showToast("QQ 好友");
+                                        break;
+                                    case ShareConstants.PLATFORM_QQ_FILE:
+                                        showToast("QQ 文件");
+                                        break;
+                                    case ShareConstants.PLATFORM_QQ_FAVOITE:
+                                        showToast("QQ 收藏");
+                                        break;
+                                    case ShareConstants.PLATFORM_NORMAL:
+                                        ShareUtils.startDefaultShareTextIntent(MainActivity.this, shareActivityInfo, "要分享的文字");
+                                        break;
+                                }
 
-                    }
+                            }
                 });
             }
         });

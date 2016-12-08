@@ -59,26 +59,37 @@ public class ShareDialogManager {
                 }
                 ShareActivityInfo shareActivityInfo = shareActivityInfoList.get(pos);
                 String activityName = shareActivityInfo.getActivityName();
+                String appName = shareActivityInfo.getAppName();
+
+                Log.e("ShareableActivity", "111 : " + activityName + " --- " + appName);
+
                 if (enableWeChat && activityName.startsWith(ShareConstants.WeChat.WECHAT_PACKAGE)) {
-                    switch (activityName) {
-                        case ShareConstants.WeChat.WECHAT_FAVORITE:
-                            onShareClick.onPlatformClick(ShareConstants.PLATFORM_WECHAT_FAVORITE, shareActivityInfo);
-                            break;
-                        case ShareConstants.WeChat.WECHAT_FRIEND:
-                            onShareClick.onPlatformClick(ShareConstants.PLATFORM_WECHAT_FRIEND, shareActivityInfo);
-                            break;
-                        case ShareConstants.WeChat.WECHAT_TIMELINE:
-                            onShareClick.onPlatformClick(ShareConstants.PLATFORM_WECHAT_TIMELINE, shareActivityInfo);
-                            break;
+                    if (activityName.equals(ShareConstants.WeChat.WECHAT_FAVORITE)) {
+                        onShareClick.onPlatformClick(ShareConstants.PLATFORM_WECHAT_FAVORITE, shareActivityInfo);
+
+                    } else if (activityName.equals(ShareConstants.WeChat.WECHAT_FRIEND)) {
+                        onShareClick.onPlatformClick(ShareConstants.PLATFORM_WECHAT_FRIEND, shareActivityInfo);
+
+                    } else if (activityName.equals(ShareConstants.WeChat.WECHAT_TIMELINE)) {
+                        onShareClick.onPlatformClick(ShareConstants.PLATFORM_WECHAT_TIMELINE, shareActivityInfo);
+
                     }
-                } else if (enableWeiBo && activityName.startsWith(ShareConstants.WeChat.WECHAT_PACKAGE)) {
-                    switch (activityName) {
-                        case ShareConstants.WeiBo.WEIBO_TIMELINE:
-                            onShareClick.onPlatformClick(ShareConstants.PLATFORM_WEIBO_TIMELINE, shareActivityInfo);
-                            break;
+                } else if (enableWeiBo && activityName.startsWith(ShareConstants.WeiBo.WEIBO_PACKAGE)) {
+                    if (activityName.equals(ShareConstants.WeiBo.WEIBO_TIMELINE)) {
+                        onShareClick.onPlatformClick(ShareConstants.PLATFORM_WEIBO_TIMELINE, shareActivityInfo);
+
                     }
-                } else {
-                    onShareClick.onPlatformClick(ShareConstants.PLATFROM_NORMAL, shareActivityInfo);
+                } else if (enableQQ && (activityName.startsWith(ShareConstants.QQ.QQ_PACKAGE)
+                        || activityName.startsWith(ShareConstants.QQ.QQ_FAVIOTE_PACKAGE)))
+                    if (activityName.equals(ShareConstants.QQ.QQ_FRIEND)) {
+                        onShareClick.onPlatformClick(ShareConstants.PLATFORM_QQ_FRIEND, shareActivityInfo);
+                    } else if (activityName.equals(ShareConstants.QQ.QQ_FAVOITE)) {
+                        onShareClick.onPlatformClick(ShareConstants.PLATFORM_QQ_FAVOITE, shareActivityInfo);
+                    } else if (activityName.equals(ShareConstants.QQ.QQ_FILE)) {
+                        onShareClick.onPlatformClick(ShareConstants.PLATFORM_QQ_FILE, shareActivityInfo);
+                    }
+                else {
+                    onShareClick.onPlatformClick(ShareConstants.PLATFORM_NORMAL, shareActivityInfo);
                 }
 
             }
@@ -97,7 +108,6 @@ public class ShareDialogManager {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.setType("text/plain");
-//        sendIntent.setType("image/*");
 
         List<ResolveInfo> resolveInfoList = packageManager
                 .queryIntentActivities(sendIntent, 0);
@@ -109,14 +119,14 @@ public class ShareDialogManager {
             String packageName = resolveInfo.activityInfo.packageName;
 
             useDefaultShare = !packageName.equals(ShareConstants.WeChat.WECHAT_PACKAGE) &&
-                    !packageName.equals(ShareConstants.WeiBo.WEIBO_PACKAGE);
+                    !packageName.equals(ShareConstants.WeiBo.WEIBO_PACKAGE) &&
+                    !packageName.equals(ShareConstants.QQ.QQ_PACKAGE);
 
             shareActivityInfoList.add(useDefaultShare ? shareActivityInfoList.size() : 0,
                     new ShareActivityInfo(
-                            useDefaultShare,
                             resolveInfo.loadLabel(packageManager).toString(),
                             resolveInfo.loadIcon(packageManager),
-                            resolveInfo.activityInfo.packageName,
+                            packageName,
                             resolveInfo.activityInfo.name));
         }
 
@@ -137,7 +147,6 @@ public class ShareDialogManager {
         for (ResolveInfo info : resolveInfoList) {
             if (info.activityInfo.name.equals(ShareConstants.WeChat.WECHAT_TIMELINE)) {
                 return new ShareActivityInfo(
-                        false,
                         info.loadLabel(packageManager).toString(),
                         info.loadIcon(packageManager),
                         info.activityInfo.packageName,
