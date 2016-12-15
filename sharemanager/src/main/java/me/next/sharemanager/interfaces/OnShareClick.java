@@ -1,6 +1,6 @@
 package me.next.sharemanager.interfaces;
 
-import me.next.sharemanager.ShareActivityInfo;
+import me.next.sharemanager.beans.ShareActivityInfo;
 
 /**
  * Created by NeXT on 16/12/1.

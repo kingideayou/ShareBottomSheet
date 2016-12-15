@@ -1,4 +1,4 @@
-package me.next.sharemanager;
+package me.next.sharemanager.utils;
 
 import android.content.Context;
 import android.graphics.Point;

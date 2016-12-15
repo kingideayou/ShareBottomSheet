@@ -12,10 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import me.next.sharemanager.beans.ShareActivityInfo;
 import me.next.sharemanager.constants.ShareConstants;
 import me.next.sharemanager.interfaces.OnShareClick;
+import me.next.sharemanager.utils.MapUtil;
+import me.next.sharemanager.utils.ShareUtils;
+import me.next.sharemanager.utils.SpUtils;
 
 /**
  * Created by NeXT on 16/11/18.
@@ -52,6 +58,7 @@ public class ShareDialogManager {
         adapter.setItemClickListener(new ShareAdapter.ItemClickListener() {
             @Override
             public void onItemClick(int pos) {
+                SpUtils.saveAppShare(context, shareActivityInfoList.get(pos).getActivityName());
                 dialog.dismiss();
                 if (onShareClick == null) {
                     Log.e("ShareDialogManager", "ItemClickListener can not be null.");
@@ -112,25 +119,45 @@ public class ShareDialogManager {
         List<ResolveInfo> resolveInfoList = packageManager
                 .queryIntentActivities(sendIntent, 0);
 
+        Map<String, Integer> appShareCountMap = SpUtils.getAppShareCountMap(context);
+
+        Map<String, ShareActivityInfo> shareActivityInfoMap = new LinkedHashMap<>();
         ResolveInfo resolveInfo;
         for (int i = resolveInfoList.size() - 1; i >= 0; i--) {
             resolveInfo = resolveInfoList.get(i);
 
             String packageName = resolveInfo.activityInfo.packageName;
+            String activityName = resolveInfo.activityInfo.name;
 
             useDefaultShare = !packageName.equals(ShareConstants.WeChat.WECHAT_PACKAGE) &&
-                    !packageName.equals(ShareConstants.WeiBo.WEIBO_PACKAGE) &&
-                    !packageName.equals(ShareConstants.QQ.QQ_PACKAGE);
+                    !packageName.equals(ShareConstants.WeiBo.WEIBO_PACKAGE);
 
-            shareActivityInfoList.add(useDefaultShare ? shareActivityInfoList.size() : 0,
-                    new ShareActivityInfo(
-                            resolveInfo.loadLabel(packageManager).toString(),
-                            resolveInfo.loadIcon(packageManager),
-                            packageName,
-                            resolveInfo.activityInfo.name));
+            ShareActivityInfo shareActivityInfo = new ShareActivityInfo(
+                    useDefaultShare,
+                    resolveInfo.loadLabel(packageManager).toString(),
+                    resolveInfo.loadIcon(packageManager),
+                    packageName,
+                    activityName);
+
+            shareActivityInfoMap.put(activityName, shareActivityInfo);
         }
 
-        return shareActivityInfoList;
+        if (appShareCountMap.isEmpty()) {
+            shareActivityInfoList.addAll(shareActivityInfoMap.values());
+            return shareActivityInfoList;
+        } else {
+            appShareCountMap = MapUtil.sortByValue(appShareCountMap);
+            for (String packageName : appShareCountMap.keySet()) { //按点击数添加点击过的应用
+                if (shareActivityInfoMap.containsKey(packageName)) {
+                    shareActivityInfoList.add(shareActivityInfoMap.get(packageName));
+                    shareActivityInfoMap.remove(packageName);
+                }
+            }
+            if (!shareActivityInfoMap.isEmpty()) { //添加未点击过的应用
+                shareActivityInfoList.addAll(shareActivityInfoMap.values());
+            }
+            return shareActivityInfoList;
+        }
 
     }
 
@@ -147,13 +174,13 @@ public class ShareDialogManager {
         for (ResolveInfo info : resolveInfoList) {
             if (info.activityInfo.name.equals(ShareConstants.WeChat.WECHAT_TIMELINE)) {
                 return new ShareActivityInfo(
+                        false,
                         info.loadLabel(packageManager).toString(),
                         info.loadIcon(packageManager),
                         info.activityInfo.packageName,
                         info.activityInfo.name);
             }
         }
-
         return null;
 
     }

@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import me.next.sharemanager.ShareActivityInfo;
+import me.next.sharemanager.beans.ShareActivityInfo;
 import me.next.sharemanager.ShareDialogManager;
-import me.next.sharemanager.ShareUtils;
+import me.next.sharemanager.utils.ShareUtils;
 import me.next.sharemanager.constants.ShareConstants;
 import me.next.sharemanager.interfaces.OnShareClick;
 

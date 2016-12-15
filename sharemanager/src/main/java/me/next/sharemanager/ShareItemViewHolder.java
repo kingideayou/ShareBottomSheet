@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import me.next.sharemanager.beans.ShareActivityInfo;
+
 
 /**
  * Created by NeXT on 16/11/18.

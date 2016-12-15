@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.next.sharemanager.beans.ShareActivityInfo;
+
 /**
  * Created by NeXT on 16/11/18.
  */

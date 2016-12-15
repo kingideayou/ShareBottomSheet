@@ -1,7 +1,9 @@
-package me.next.sharemanager;
+package me.next.sharemanager.utils;
 
 import android.content.Context;
 import android.content.Intent;
+
+import me.next.sharemanager.beans.ShareActivityInfo;
 
 /**
  * Created by NeXT on 16/11/21.

@@ -1,4 +1,4 @@
-package me.next.sharemanager;
+package me.next.sharemanager.beans;
 
 import android.graphics.drawable.Drawable;
 
@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 
 public class ShareActivityInfo {
 
+    private boolean useDefaultShare;
     private Drawable appIcon;
     private String appName;
     private String packageName;
@@ -16,11 +17,20 @@ public class ShareActivityInfo {
     public ShareActivityInfo() {
     }
 
-    public ShareActivityInfo(String appName, Drawable appIcon, String packageName, String activityName) {
+    public ShareActivityInfo(boolean useDefaultShare, String appName, Drawable appIcon, String packageName, String activityName) {
+        this.useDefaultShare = useDefaultShare;
         this.appName = appName;
         this.appIcon = appIcon;
         this.packageName = packageName;
         this.activityName = activityName;
+    }
+
+    public boolean useDefaultShare() {
+        return useDefaultShare;
+    }
+
+    public void setUseDefaultShare(boolean useDefaultShare) {
+        this.useDefaultShare = useDefaultShare;
     }
 
     public String getPackageName() {
@@ -58,7 +68,8 @@ public class ShareActivityInfo {
     @Override
     public String toString() {
         return "ShareActivityInfo{" +
-                "appName='" + appName + '\'' +
+                "useDefaultShare=" + useDefaultShare +
+                ", appName='" + appName + '\'' +
                 ", appIcon='" + appIcon + '\'' +
                 ", packageName='" + packageName + '\'' +
                 ", activityName='" + activityName + '\'' +
