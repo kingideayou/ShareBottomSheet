@@ -68,8 +68,6 @@ public class ShareDialogManager {
                 String activityName = shareActivityInfo.getActivityName();
                 String appName = shareActivityInfo.getAppName();
 
-                Log.e("ShareableActivity", "111 : " + activityName + " --- " + appName);
-
                 if (enableWeChat && activityName.startsWith(ShareConstants.WeChat.WECHAT_PACKAGE)) {
                     if (activityName.equals(ShareConstants.WeChat.WECHAT_FAVORITE)) {
                         onShareClick.onPlatformClick(ShareConstants.PLATFORM_WECHAT_FAVORITE, shareActivityInfo);
@@ -143,6 +141,7 @@ public class ShareDialogManager {
         }
 
         if (appShareCountMap.isEmpty()) {
+            orderByPlatform(shareActivityInfoList, shareActivityInfoMap);
             shareActivityInfoList.addAll(shareActivityInfoMap.values());
             return shareActivityInfoList;
         } else {
@@ -153,12 +152,64 @@ public class ShareDialogManager {
                     shareActivityInfoMap.remove(packageName);
                 }
             }
+            orderByPlatform(shareActivityInfoList, shareActivityInfoMap);
             if (!shareActivityInfoMap.isEmpty()) { //添加未点击过的应用
                 shareActivityInfoList.addAll(shareActivityInfoMap.values());
             }
             return shareActivityInfoList;
         }
 
+    }
+
+    private void orderByPlatform(List<ShareActivityInfo> shareActivityInfoList, Map<String, ShareActivityInfo> shareActivityInfoMap) {
+        List<String> packageNameList = new ArrayList<>();
+        for (String packageName : shareActivityInfoMap.keySet()) {
+            if (enableQQ) {
+                switch (packageName) {
+                    case ShareConstants.QQ.QQ_FAVIOTE_PACKAGE:
+                        shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.QQ.QQ_FAVIOTE_PACKAGE));
+                        packageNameList.add(ShareConstants.QQ.QQ_FAVIOTE_PACKAGE);
+                        break;
+                    case ShareConstants.QQ.QQ_FAVOITE:
+                        shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.QQ.QQ_FAVOITE));
+                        packageNameList.add(ShareConstants.QQ.QQ_FAVOITE);
+                        break;
+                    case ShareConstants.QQ.QQ_FILE:
+                        shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.QQ.QQ_FILE));
+                        packageNameList.add(ShareConstants.QQ.QQ_FILE);
+                        break;
+                    case ShareConstants.QQ.QQ_FRIEND:
+                        shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.QQ.QQ_FRIEND));
+                        packageNameList.add(ShareConstants.QQ.QQ_FRIEND);
+                        break;
+                }
+            }
+            if (enableWeChat) {
+                switch (packageName) {
+                    case ShareConstants.WeChat.WECHAT_FAVORITE:
+                        shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.WeChat.WECHAT_FAVORITE));
+                        packageNameList.add(ShareConstants.WeChat.WECHAT_FAVORITE);
+                        break;
+                    case ShareConstants.WeChat.WECHAT_FRIEND:
+                        shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.WeChat.WECHAT_FRIEND));
+                        packageNameList.add(ShareConstants.WeChat.WECHAT_FRIEND);
+                        break;
+                    case ShareConstants.WeChat.WECHAT_TIMELINE:
+                        shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.WeChat.WECHAT_TIMELINE));
+                        packageNameList.add(ShareConstants.WeChat.WECHAT_TIMELINE);
+                        break;
+                }
+            }
+            if (enableWeiBo) {
+                if (packageName.equals(ShareConstants.WeiBo.WEIBO_TIMELINE)) {
+                    shareActivityInfoList.add(shareActivityInfoMap.get(ShareConstants.WeiBo.WEIBO_TIMELINE));
+                    packageNameList.add(ShareConstants.WeiBo.WEIBO_TIMELINE);
+                }
+            }
+        }
+        for (String s : packageNameList) {
+            shareActivityInfoMap.remove(s);
+        }
     }
 
     public static ShareActivityInfo getWechatTimeLineShareActivityInfo(Context context) {

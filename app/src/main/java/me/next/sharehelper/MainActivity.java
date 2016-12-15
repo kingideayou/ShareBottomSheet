@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
                 new ShareDialogManager.Builder()
                         .enableWeChat(true)
                         .enableQQ(true)
+                        .enableWeiBo(true)
                         .build().showShareTextDialog(MainActivity.this,
                         new OnShareClick() {
                             @Override
