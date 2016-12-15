@@ -1,7 +1,8 @@
 # ShareHelper
 
-实现系统分享效果（可分享到朋友圈），微信、微博、QQ 分享效果可自定义。  
+实现系统分享效果（可分享到朋友圈），微信、微博、QQ 分享效果可自定义。
 
+支持 app 按点击数排序。  
 
 ## How to Use
       new ShareDialogManager.Builder()
